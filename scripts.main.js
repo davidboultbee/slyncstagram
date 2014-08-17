@@ -59,14 +59,14 @@ $(document).ready(function(){
 										$(oCarousel).append(oImgHolder);
 										
 										fSizeImage(_oImg,oImgHolder,true,false);
-										$(oImgHolder).css({left:'100%'});
+										//$(oImgHolder).css({left:'100%'});
 										console.log('gallery: showing image '+_iCurrent);
-										$(oImgHolder).animate({left:'-5px'},1000,function(){
+										//$(oImgHolder).animate({left:'-5px'},1000,function(){
 											console.log('gallery: finished with image '+_iCurrent);
 											$(oImgHolder).prevAll().remove();
 											setTimeout(function(){
 												fNextImg();
-											},1000);
+										//	},1000);
 										});										
 									};
 									$(oImg).attr('src',evt.target.result);						
@@ -110,7 +110,6 @@ $(document).ready(function(){
 			oSocket.on('connect',function(){
 				bSocketConnected=true;
 				console.log('websocket: connected to glue');
-				alert('connected to glue');
 			});
 			
 			oSocket.on('connecting',function(){
