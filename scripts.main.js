@@ -104,7 +104,7 @@ $(document).ready(function(){
 			*/
 			console.log('websocket: starting websocket');
 			
-			var oSocket = io.connect();//'https://glue-11350.onmodulus.net',{'query':'appliance_id=slyncstagram'}),
+			var oSocket = io.connect('https://glue-11350.onmodulus.net',{'query':'appliance_id=slyncstagram'}),
 				bSocketConnected=false;
 				
 			oSocket.on('connect',function(){
