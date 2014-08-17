@@ -1,15 +1,32 @@
 $(document).ready(function(){
+
+	var oCarousel=document.createElement('DIV');
+	$(oCarousel).attr('id','carousel');
+	$(oCarousel).addClass('waiting');
+	$('body').append(oCarousel);
+
 	document.addEventListener('deviceready', function(){
 		
 		try{
 			
 			console.log('hello world');
+			//window.plugins.insomnia.keepAwake();
+			
+			//navigator.camera.getPicture(function(){}, function(){}, { quality: 50 }); 
+			
+			/*
+				THIS SECTION DEALS WITH SCANNING FOR IMAGES AND SHOWING THEM IN THE CAROUSEL
+			*/
 			
 			window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){ // success get file system
 				
+				console.log('gallery: got file system');
 				fileSystem.root.getDirectory('dcim/Camera',{create:false}, function(oDirectory){
 					
+					console.log('gallery: got root directory');
 					oDirectory.createReader().readEntries(function(aEntries){ // success get files and folders
+						
+						console.log('gallery: there are '+aEntries.length+' files');
 						var aImageFiles=new Array();
 						
 						for(var i=0; i<aEntries.length; ++i) {
@@ -19,38 +36,98 @@ $(document).ready(function(){
 							aImageFiles.push(aEntries[i]);
 						}
 						
+						console.log('gallery: there are '+aImageFiles.length+' image .jpg files');
 						
 						var iCurrent=0,
 							iMax=aImageFiles.length;
 	
-						setInterval(function(){
-							aImageFiles[iCurrent].file(function(oFile){
+						function fNextImg(){
+							var _iCurrent=iCurrent;
+							console.log('gallery: working with image '+_iCurrent);
+							aImageFiles[_iCurrent].file(function(oFile){
+								console.log('gallery: opened image '+_iCurrent);
 								var reader = new FileReader();
 								reader.onloadend = function(evt) {
-									$('body').css('background-image',"url('"+evt.target.result+"')");
+									console.log('gallery: loaded image '+_iCurrent);
+									var oImg=document.createElement('IMG');
+									oImg.onload=function(){
+										var _oImg=this,
+											oImgHolder=document.createElement('DIV');
+										
+										$(oImgHolder).addClass('imgHolder');
+										$(oImgHolder).append(_oImg);
+										$(oCarousel).append(oImgHolder);
+										
+										fSizeImage(_oImg,oImgHolder,true,false);
+										$(oImgHolder).css({left:'100%'});
+										console.log('gallery: showing image '+_iCurrent);
+										$(oImgHolder).animate({left:'-5px'},1000,function(){
+											console.log('gallery: finished with image '+_iCurrent);
+											$(oImgHolder).prevAll().remove();
+											setTimeout(function(){
+												fNextImg();
+											},1000);
+										});										
+									};
+									$(oImg).attr('src',evt.target.result);						
 								}; 
 								reader.readAsDataURL(oFile);
 							
 							},function(){
-								alert("can't open file");
+								console.log("ERROR: gallery: can't open file");
+								fNextImg();	
 							});
 							
 							iCurrent++;
 							if(iCurrent>=iMax) iCurrent=0;
-						},1000);						
+						}
+						fNextImg();						
 
 					}, function(oError){ // error get files and folders
-						alert(oError.code);
+						alert('ERROR: gallery: cannot open files and folders',oError.code);
 					});
 			
 				}, function(oError){
-					alert(oError.code);
-				})
+					alert('ERROR: gallery: cannot create directory reader',oError.code);
+				});
 			}, function(evt){ // error get file system
-				alert('could not access file system');
+				alert('ERROR: gallery: could not access file system');
 			});
+			
+			/*
+				END OF THE IMAGE CAROUSEL
+			*/
+			
+			
+			/*
+				DEAL WITH THE WEBSOCKET CONNECTION
+			*/
+			console.log('websocket: starting websocket');
+			
+			var oSocket = io.connect();//'https://glue-11350.onmodulus.net',{'query':'appliance_id=slyncstagram'}),
+				bSocketConnected=false;
+				
+			oSocket.on('connect',function(){
+				bSocketConnected=true;
+				console.log('websocket: connected to glue');
+				alert('connected to glue');
+			});
+			
+			oSocket.on('connecting',function(){
+				console.log('websocket: connecting to glue');
+			});
+	
+			oSocket.on('disconnect',function(){
+				bSocketConnected=false;
+				console.log('websocket: disconnected from glue');
+			});
+			
+			oSocket.on('lights',function(oData){
+				console.log('websocket: lights info received.\n'+oData);
+			});
+			
 		} catch(e) {
-			alert(e.message);
+			console.log('general error\n'+e.message);
 		}
 		
 	}, true);
