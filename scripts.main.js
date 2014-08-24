@@ -153,7 +153,7 @@ $(document).ready(function(){
 				var iCurrent=0,
 					aImageFiles=new Array();//oGalleryImages.listImages()[sGallery].images.shuffle(),//.allImages();
 					iMax=0,//aImageFiles.length,
-					bRunning=false
+					bRunning=false,
 					sCurrentGroup;
 					
 				console.log('gallery: there are '+aImageFiles.length+' images in the gallery');
