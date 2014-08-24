@@ -216,7 +216,7 @@ $(document).ready(function(){
 					var aGroups=oGalleryImages.listGroups();
 					if(aGroups.indexOf(sGallery)<0) return;
 					
-					sCurrentGroup=sGroup;
+					sCurrentGroup=sGallery;
 					window.localStorage.setItem('current_group',sCurrentGroup)
 					
 					iCurrent=0,
