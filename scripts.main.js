@@ -139,7 +139,7 @@ $(document).ready(function(){
 						
 					for(var i=0;i<aAllGroups.length;i++){
 						var sGroupName=aAllGroups[i];
-						if((!aGalleryImages[sGroupName].images)||(!aGalleryImages[sGroupName].images.length==0)) continue;
+						if((!aGalleryImages[sGroupName].images)||(aGalleryImages[sGroupName].images.length==0)) continue;
 						aGroups.push(sGroupName);
 					}
 					return aGroups;
