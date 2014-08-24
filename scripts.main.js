@@ -133,6 +133,18 @@ $(document).ready(function(){
 					return aGalleryImages;
 				}
 				
+				_oGalleryImages.listGroups=function(){
+					var aAllGroups=Object.keys(aGalleryImages),
+						aGroups=new Array();
+						
+					for(var i=0;i<aAllGroups.length;i++){
+						var sGroupName=aAllGroups[i];
+						if((!aGalleryImages[sGroupName].images)||(!aGalleryImages[sGroupName].images.length==0)) continue;
+						aGroups.push(sGroupName);
+					}
+					return aGroups;
+				}
+				
 			} // end of gallery images object
 			
 			var oGallery=new function(){
@@ -242,7 +254,10 @@ $(document).ready(function(){
 			
 			oSocket.on('slyncstagram_request_announce',function(){
 				console.log('websocket: request announce received');
-				oSocket.emit('slyncstagram_announce',{device_id:sDeviceID});
+				oSocket.emit('slyncstagram_announce',{
+					device_id:sDeviceID,
+					groups:aGalleryImages.listGroups()
+				});
 			});
 			
 			function fIdentify(){
