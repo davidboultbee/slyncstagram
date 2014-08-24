@@ -256,7 +256,7 @@ $(document).ready(function(){
 				console.log('websocket: request announce received');
 				oSocket.emit('slyncstagram_announce',{
 					device_id:sDeviceID,
-					groups:aGalleryImages.listGroups()
+					groups:oGalleryImages.listGroups()
 				});
 			});
 			
