@@ -23,8 +23,14 @@ $(document).ready(function(){
 	document.addEventListener('deviceready', function(){
 		
 		try{
+		
+			var sDeviceID=device.uuid;
 			
 			console.log('hello world');
+			console.log('device: '+sDeviceID);
+			
+			document.addEventListener('menubutton', function(){}, false);
+			
 			//window.plugins.insomnia.keepAwake();
 			
 			//navigator.camera.getPicture(function(){}, function(){}, { quality: 50 }); 
@@ -66,6 +72,7 @@ $(document).ready(function(){
 							}
 					
 							if(!aItems[i].name.match(/\.jpg$/i)) continue;
+							if(aItems[i].size>1200000) continue;
 				
 							//aImageFiles.push(aItems[i]);
 							aImageFiles.push({
@@ -128,18 +135,19 @@ $(document).ready(function(){
 				
 			} // end of gallery images object
 			
-			$(oGalleryImages).bind('ready',function(){
-				console.log('gallery: beginning');
+			var oGallery=new function(){
+				var _oGallery=this;
 				
 				var iCurrent=0,
-					aImageFiles=oGalleryImages.listImages()['Nature'].images,//.allImages();
-					iMax=aImageFiles.length;
+					aImageFiles=new Array();//oGalleryImages.listImages()[sGallery].images.shuffle(),//.allImages();
+					iMax=0,//aImageFiles.length,
+					bRunning=false;
 					
 				console.log('gallery: there are '+aImageFiles.length+' images in the gallery');
 
 				function fNextImg(){
-					if(iCurrent==7) iCurrent++;
-				
+					bRunning=true;
+					
 					var _iCurrent=iCurrent;
 					console.log('gallery: working with image '+_iCurrent);
 					console.log('gallery: image is on path '+aImageFiles[_iCurrent].path);
@@ -188,7 +196,21 @@ $(document).ready(function(){
 					iCurrent++;
 					if(iCurrent>=iMax) iCurrent=0;
 				}
-				fNextImg();	
+				
+				_oGallery.load=function(sGallery){
+					console.log('gallery: opening '+sGallery);
+					
+					iCurrent=0,
+					aImageFiles=oGalleryImages.listImages()[sGallery].images.shuffle(),//.allImages();
+					iMax=aImageFiles.length;
+					if(!bRunning) fNextImg();
+				}
+				
+				
+			}
+			
+			$(oGalleryImages).bind('ready',function(){
+				oGallery.load('Black and white');
 			});
 			
 			/*
@@ -218,9 +240,29 @@ $(document).ready(function(){
 				console.log('websocket: disconnected from glue');
 			});
 			
-			oSocket.on('lights',function(oData){
-				console.log('websocket: lights info received.\n'+oData);
+			oSocket.on('slyncstagram_request_announce',function(){
+				console.log('websocket: request announce received');
+				oSocket.emit('slyncstagram_announce',{device_id:sDeviceID});
 			});
+			
+			function fIdentify(){
+				var oFlash=document.createElement('DIV');
+				$(oFlash).attr('id','flash');
+				$(oFlash).html('device_id:'+sDeviceID);
+				$('body').append(oFlash);
+				setTimeout(function(){
+					$(oFlash).remove();
+				},4000);
+			};
+			
+			oSocket.on('slyncstagram_identify',function(oData){
+				if(!oData.device_id || (oData.device_id!=sDeviceID)) return;
+				fIdentify();
+			});
+			
+			fIdentify();
+			
+			
 			
 		} catch(e) {
 			console.log('general error\n'+e.message);
