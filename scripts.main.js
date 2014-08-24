@@ -153,7 +153,8 @@ $(document).ready(function(){
 				var iCurrent=0,
 					aImageFiles=new Array();//oGalleryImages.listImages()[sGallery].images.shuffle(),//.allImages();
 					iMax=0,//aImageFiles.length,
-					bRunning=false;
+					bRunning=false
+					sCurrentGroup;
 					
 				console.log('gallery: there are '+aImageFiles.length+' images in the gallery');
 
@@ -215,21 +216,31 @@ $(document).ready(function(){
 					var aGroups=oGalleryImages.listGroups();
 					if(aGroups.indexOf(sGallery)<0) return;
 					
+					sCurrentGroup=sGroup;
+					window.localStorage.setItem('current_group',sCurrentGroup)
+					
 					iCurrent=0,
 					aImageFiles=oGalleryImages.listImages()[sGallery].images.shuffle();//.allImages();
 					iMax=aImageFiles.length;
 					if(!bRunning) fNextImg();
 				}
 				
+				_oGallery.current_group=function(){
+					if(sCurrentGroup) return sCurrentGroup;
+					else return false;
+				}
 				
 			}
 			
 			$(oGalleryImages).bind('ready',function(){
-				var aGroups=oGalleryImages.listGroups(),
-					iRandomGroupIndex=Math.floor(Math.random()*aGroups.length),
-					sRandomGroup=aGroups[iRandomGroupIndex];
+				if(window.localStorage.getItem('current_group')) oGallery.load(window.localStorage.getItem('current_group'));
+				else {
+					var aGroups=oGalleryImages.listGroups(),
+						iRandomGroupIndex=Math.floor(Math.random()*aGroups.length),
+						sRandomGroup=aGroups[iRandomGroupIndex];
 					
-				oGallery.load(sRandomGroup);
+					oGallery.load(sRandomGroup);
+				}
 			});
 			
 			/*
@@ -263,6 +274,7 @@ $(document).ready(function(){
 				console.log('websocket: request announce received');
 				oSocket.emit('slyncstagram_announce',{
 					device_id:sDeviceID,
+					current_group:oGallery.current_group(),
 					groups:oGalleryImages.listGroups()
 				});
 			});
