@@ -31,7 +31,7 @@ $(document).ready(function(){
 			
 			document.addEventListener('menubutton', function(){}, false);
 			
-			//window.plugins.insomnia.keepAwake();
+			window.plugins.insomnia.keepAwake();
 			
 			//navigator.camera.getPicture(function(){}, function(){}, { quality: 50 }); 
 			
