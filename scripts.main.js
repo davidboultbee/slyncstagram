@@ -49,7 +49,7 @@ $(document).ready(function(){
 				function fFinishedScanning(){
 					console.log('filesystem: finished scan');
 					
-					console.log(JSON.stringify(aGalleryImages).replace(/,/g,',\n'));
+					//console.log(JSON.stringify(aGalleryImages).replace(/,/g,',\n'));
 					
 					$(_oGalleryImages).trigger('ready');
 				}
@@ -154,7 +154,7 @@ $(document).ready(function(){
 					aImageFiles=new Array();//oGalleryImages.listImages()[sGallery].images.shuffle(),//.allImages();
 					iMax=0,//aImageFiles.length,
 					bRunning=false,
-					sCurrentGroup;
+					sCurrentGroup='';
 					
 				console.log('gallery: there are '+aImageFiles.length+' images in the gallery');
 
