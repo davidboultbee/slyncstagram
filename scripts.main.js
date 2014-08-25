@@ -159,8 +159,6 @@ $(document).ready(function(){
 				console.log('gallery: there are '+aImageFiles.length+' images in the gallery');
 
 				function fNextImg(){
-					bRunning=true;
-					
 					var _iCurrent=iCurrent;
 					console.log('gallery: working with image '+_iCurrent);
 					console.log('gallery: image is on path '+aImageFiles[_iCurrent].path);
@@ -183,6 +181,7 @@ $(document).ready(function(){
 								
 									$(oImgHolder).addClass('imgHolder');
 									$(oImgHolder).append(_oImg);
+									$('#caption').appendTo(oImgHolder); // append a caption if there is one...
 									$(oCarousel).append(oImgHolder);
 								
 									fSizeImage(_oImg,oImgHolder,true,false);
@@ -191,7 +190,7 @@ $(document).ready(function(){
 									$(oImgHolder).prevAll().remove();
 									setTimeout(function(){
 										fNextImg();
-									},500);							
+									},1000);							
 								};
 								$(oImg).attr('src',evt.target.result);						
 							}; 
@@ -212,7 +211,7 @@ $(document).ready(function(){
 				
 				_oGallery.load=function(sGallery){
 					console.log('gallery: opening '+sGallery);
-					
+					 
 					var aGroups=oGalleryImages.listGroups();
 					if(aGroups.indexOf(sGallery)<0) return;
 					
@@ -222,7 +221,15 @@ $(document).ready(function(){
 					iCurrent=0,
 					aImageFiles=oGalleryImages.listImages()[sGallery].images.shuffle();//.allImages();
 					iMax=aImageFiles.length;
+					
+					$('#caption').remove();
+					var oCaption=documemt.createElement('DIV');
+					$(oCaption).attr('id','caption');
+					$(oCaption).html(sGallery);
+					$('body').append(oCaption);
+					
 					if(!bRunning) fNextImg();
+					bRunning=true;
 				}
 				
 				_oGallery.current_group=function(){
@@ -282,7 +289,7 @@ $(document).ready(function(){
 			function fIdentify(){
 				var oFlash=document.createElement('DIV');
 				$(oFlash).attr('id','flash');
-				$(oFlash).html('device_id:'+sDeviceID);
+				$(oFlash).html('device_id:'+sDeviceID+'<br />group:'+oGallery.current_group());
 				$('body').append(oFlash);
 				setTimeout(function(){
 					$(oFlash).remove();
