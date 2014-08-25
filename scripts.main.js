@@ -223,7 +223,7 @@ $(document).ready(function(){
 					iMax=aImageFiles.length;
 					
 					$('#caption').remove();
-					var oCaption=documemt.createElement('DIV');
+					var oCaption=document.createElement('DIV');
 					$(oCaption).attr('id','caption');
 					$(oCaption).html(sGallery);
 					$('body').append(oCaption);
