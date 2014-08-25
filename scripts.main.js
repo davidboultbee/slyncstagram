@@ -181,7 +181,7 @@ $(document).ready(function(){
 								
 									$(oImgHolder).addClass('imgHolder');
 									$(oImgHolder).append(_oImg);
-									$('#caption').appendTo(oImgHolder); // append a caption if there is one...
+									$('body').children('#caption').appendTo(oImgHolder); // append a caption if there is one...
 									$(oCarousel).append(oImgHolder);
 								
 									fSizeImage(_oImg,oImgHolder,true,false);

@@ -58,7 +58,9 @@ body {
 	left:0;
 	background-color:white;
 	font-family:"Arial, Sans-Serif";
-	font-size:30pt;
+	text-transform:lowercase;
+	font-weight:bold;
+	font-size:70pt;
 	padding-top:20px;
 	padding-left:20px;
 	color:black;
