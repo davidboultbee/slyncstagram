@@ -271,7 +271,7 @@ $(document).ready(function(){
 				});
 			}
 			
-			function fIdentify(){
+			function fIdentify(oData){
 				var oFlash=document.createElement('DIV');
 				$(oFlash).attr('id','flash');
 				$(oFlash).html('device_id:'+sDeviceID+'<br />group:'+oGallery.current_group());
