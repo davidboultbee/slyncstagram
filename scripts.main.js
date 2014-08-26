@@ -275,7 +275,14 @@ $(document).ready(function(){
 				var oFlash=document.createElement('DIV');
 				$(oFlash).attr('id','flash');
 				$(oFlash).html('device_id:'+sDeviceID+'<br />group:'+oGallery.current_group());
+				
+				if(oData && oData.red && oData.green && oData.blue){
+					var sRGB='rgb=('+oData.red+','+oData.green+','+oData.blue+')';
+					$(oFlash).css('background-color',sRGB);
+				}
+				
 				$('body').append(oFlash);
+				
 				setTimeout(function(){
 					$(oFlash).remove();
 				},4000);
@@ -307,7 +314,7 @@ $(document).ready(function(){
 			
 			oSocket.on('slyncstagram_identify',function(oData){
 				if(!oData.device_id || (oData.device_id!=sDeviceID)) return;
-				fIdentify();
+				fIdentify(oData);
 			});
 			
 			oSocket.on('slyncstagram_set_group',function(oData){
