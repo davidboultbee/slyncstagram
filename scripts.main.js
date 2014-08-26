@@ -159,7 +159,9 @@ $(document).ready(function(){
 				console.log('gallery: there are '+aImageFiles.length+' images in the gallery');
 
 				function fNextImg(){
-					var _iCurrent=iCurrent;
+					var _iCurrent=iCurrent,
+						_sCurrentGroup=sCurrentGroup;
+						
 					console.log('gallery: working with image '+_iCurrent);
 					console.log('gallery: image is on path '+aImageFiles[_iCurrent].path);
 					
@@ -181,7 +183,7 @@ $(document).ready(function(){
 								
 									$(oImgHolder).addClass('imgHolder');
 									$(oImgHolder).append(_oImg);
-									$('body').children('#caption').appendTo(oImgHolder); // append a caption if there is one...
+									if($('body').children('#caption').attr('gallery_name')==_sCurrentGroup) $('body').children('#caption').appendTo(oImgHolder); // append a caption if there is one...
 									$(oCarousel).append(oImgHolder);
 								
 									fSizeImage(_oImg,oImgHolder,true,false);
@@ -225,6 +227,7 @@ $(document).ready(function(){
 					$('#caption').remove();
 					var oCaption=document.createElement('DIV');
 					$(oCaption).attr('id','caption');
+					$(oCaption).attr('gallery_name',sGallery);
 					$(oCaption).html(sGallery);
 					$('body').append(oCaption);
 					
