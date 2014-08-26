@@ -278,7 +278,7 @@ $(document).ready(function(){
 				$(oFlash).html('device_id:'+sDeviceID+'<br />group:'+oGallery.current_group());
 				
 				if(oData && oData.red && oData.green && oData.blue){
-					var sRGB='rgb=('+oData.red+','+oData.green+','+oData.blue+')';
+					var sRGB='rgb('+oData.red+','+oData.green+','+oData.blue+')';
 					$(oFlash).css('background-color',sRGB);
 				}
 				
