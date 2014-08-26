@@ -263,12 +263,32 @@ $(document).ready(function(){
 			*/
 			console.log('websocket: starting websocket');
 			
+			function fAnnounce(){
+				oSocket.emit('slyncstagram_announce',{
+					device_id:sDeviceID,
+					current_group:oGallery.current_group(),
+					groups:oGalleryImages.listGroups()
+				});
+			}
+			
+			function fIdentify(){
+				var oFlash=document.createElement('DIV');
+				$(oFlash).attr('id','flash');
+				$(oFlash).html('device_id:'+sDeviceID+'<br />group:'+oGallery.current_group());
+				$('body').append(oFlash);
+				setTimeout(function(){
+					$(oFlash).remove();
+				},4000);
+			};
+			
 			var oSocket = io.connect('https://glue-11350.onmodulus.net',{'query':'appliance_id=slyncstagram'}),
 				bSocketConnected=false;
 				
 			oSocket.on('connect',function(){
 				bSocketConnected=true;
 				console.log('websocket: connected to glue');
+				fAnnounce();			
+				fIdentify();
 			});
 			
 			oSocket.on('connecting',function(){
@@ -282,29 +302,13 @@ $(document).ready(function(){
 			
 			oSocket.on('slyncstagram_request_announce',function(){
 				console.log('websocket: request announce received');
-				oSocket.emit('slyncstagram_announce',{
-					device_id:sDeviceID,
-					current_group:oGallery.current_group(),
-					groups:oGalleryImages.listGroups()
-				});
+				fAnnounce();
 			});
-			
-			function fIdentify(){
-				var oFlash=document.createElement('DIV');
-				$(oFlash).attr('id','flash');
-				$(oFlash).html('device_id:'+sDeviceID+'<br />group:'+oGallery.current_group());
-				$('body').append(oFlash);
-				setTimeout(function(){
-					$(oFlash).remove();
-				},4000);
-			};
 			
 			oSocket.on('slyncstagram_identify',function(oData){
 				if(!oData.device_id || (oData.device_id!=sDeviceID)) return;
 				fIdentify();
 			});
-			
-			fIdentify();
 			
 			oSocket.on('slyncstagram_set_group',function(oData){
 				if(!oData.device_id || (oData.device_id!=sDeviceID)) return;
