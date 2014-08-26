@@ -272,6 +272,7 @@ $(document).ready(function(){
 			}
 			
 			function fIdentify(oData){
+				console.log('websocket: identifying');
 				var oFlash=document.createElement('DIV');
 				$(oFlash).attr('id','flash');
 				$(oFlash).html('device_id:'+sDeviceID+'<br />group:'+oGallery.current_group());
@@ -295,7 +296,7 @@ $(document).ready(function(){
 				bSocketConnected=true;
 				console.log('websocket: connected to glue');
 				fAnnounce();			
-				fIdentify();
+				fIdentify({});
 			});
 			
 			oSocket.on('connecting',function(){
