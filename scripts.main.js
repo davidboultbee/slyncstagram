@@ -289,7 +289,7 @@ $(document).ready(function(){
 				},4000);
 			};
 			
-			var oSocket = io.connect('ws://192.168.10.1:8081',{'query':'appliance_id=slyncstagram'}),
+			var oSocket = io.connect('http://192.168.10.1:8081',{'query':'appliance_id=slyncstagram'}),
 				bSocketConnected=false;
 				
 			oSocket.on('connect',function(){
