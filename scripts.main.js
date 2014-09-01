@@ -72,7 +72,7 @@ $(document).ready(function(){
 							}
 					
 							if(!aItems[i].name.match(/\.jpg$/i)) continue;
-							if(aItems[i].size>1200000) continue;
+							if(aItems[i].size>900000) continue;
 				
 							//aImageFiles.push(aItems[i]);
 							aImageFiles.push({
