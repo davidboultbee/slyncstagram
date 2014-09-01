@@ -161,6 +161,13 @@ $(document).ready(function(){
 				function fNextImg(){
 					var _iCurrent=iCurrent,
 						_sCurrentGroup=sCurrentGroup;
+var oFailsafeTimeout=setTimeout(function(){
+clearTimeout(oFailsafeTimeout);
+clearTimeout(oNormalTimeout);
+fNextImg();
+},5000);
+
+var oNormalTimeout;
 						
 					console.log('gallery: working with image '+_iCurrent);
 					console.log('gallery: image is on path '+aImageFiles[_iCurrent].path);
@@ -190,8 +197,10 @@ $(document).ready(function(){
 									console.log('gallery: showing image '+_iCurrent);
 									console.log('gallery: finished with image '+_iCurrent);
 									$(oImgHolder).prevAll().remove();
-									setTimeout(function(){
-										fNextImg();
+									oNormalTimeout=setTimeout(function(){
+										clearTimeout(oFailsafeTimeout);
+clearTimeout(oNormalTimeout);
+fNextImg();
 									},1000);							
 								};
 								$(oImg).attr('src',evt.target.result);						
